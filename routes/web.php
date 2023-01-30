@@ -4,7 +4,6 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,7 +18,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    Log::debug('Hello World');
     return view('welcome');
 })->name('home');
 
@@ -80,7 +78,7 @@ Route::put('/posts/{post}/update', function (Post $post, Request $request) {
 
 })->name('posts.update');
 
-Route::delete('/posts/{post}/delete', function (Post $post) {
+Route::get('/posts/{post}/delete', function (Post $post) {
     $post->delete();
     return redirect()->route('posts');
 })->name('posts.delete');
