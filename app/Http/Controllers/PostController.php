@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Category\CategoryResource;
+use App\Http\Resources\Post\PostIndexResource;
+use App\Http\Resources\Post\PostShowResource;
+use App\Http\Resources\User\UserResource;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
@@ -14,9 +18,12 @@ class PostController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        return view('posts', [
-            'posts' => Post::latest()->with(['category', 'user'])->get()
-        ]);
+        $posts = Post::latest()->with(['category', 'user'])->get();
+
+        return view('posts')->with(
+            'posts',
+            PostIndexResource::collection($posts)
+        );
     }
 
     /**
@@ -25,10 +32,12 @@ class PostController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('posts.create', [
-            'categories' => Category::all(),
-            'users' => User::all(),
-        ]);
+        $categories = Category::all();
+        $users = User::all();
+
+        return view('posts.create')
+            ->with('categories', CategoryResource::collection($categories))
+            ->with('users', UserResource::collection($users));
     }
 
     /**
@@ -57,9 +66,7 @@ class PostController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show(Post $post) {
-        return view('posts.show', [
-            'post' => $post->load(['category', 'user']),
-        ]);
+        return view('posts.show')->with('post', new PostShowResource($post));
     }
 
     /**
@@ -69,11 +76,14 @@ class PostController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit(Post $post) {
-        return view('posts.edit', [
-            'post' => $post,
-            'categories' => Category::all(),
-            'users' => User::all(),
-        ]);
+        $categories = Category::all();
+        $users = User::all();
+
+
+        return view('posts.edit')
+            ->with('post', new PostShowResource($post))
+            ->with('categories', CategoryResource::collection($categories))
+            ->with('users', UserResource::collection($users));
     }
 
     /**
