@@ -18,39 +18,12 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-
-
-Route::get(
-    '/posts',
-    [PostController::class, 'index']
-)->name('posts');
-
-Route::get(
-    '/posts/create',
-    [PostController::class, 'create']
-)->name('posts.create');
-
-Route::post(
-    '/posts',
-    [PostController::class, 'store']
-)->name('posts.store');
-
-Route::get(
-    '/posts/{post}',
-    [PostController::class, 'show']
-)->name('posts.show');
-
-Route::get(
-    '/posts/{post}/edit',
-    [PostController::class, 'edit']
-)->name('posts.edit');
-
-Route::put(
-    '/posts/{post}/update',
-    [PostController::class, 'update']
-)->name('posts.update');
-
-Route::get(
-    '/posts/{post}/delete',
-    [PostController::class, 'delete']
-)->name('posts.delete');
+Route::controller(PostController::class)->group(function () {
+    Route::get('posts', 'index')->name('posts');
+    Route::get('posts/create', 'create')->name('posts.create');
+    Route::post('posts', 'store')->name('posts.store');
+    Route::get('posts/{post}', 'show')->name('posts.show');
+    Route::get('posts/{post}/edit', 'edit')->name('posts.edit');
+    Route::put('posts/{post}/update', 'update')->name('posts.update');
+    Route::get('posts/{post}/delete', 'destroy')->name('posts.delete');
+});
