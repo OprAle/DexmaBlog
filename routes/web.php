@@ -19,11 +19,30 @@ Route::get('/', function () {
 })->name('home');
 
 Route::controller(PostController::class)->name('posts.')->prefix('posts')->group(function () {
+    /**
+     * Display a listing of the resource.
+     */
     Route::get('/', 'index')->name('index');
+
+    /**
+     * Show the form for creating a new resource.
+     */
     Route::get('/create', 'create')->name('create');
     Route::post('/', 'store')->name('store');
+
+    /**
+     * Display the specified resource.
+     */
     Route::get('/{post}', 'show')->name('show');
+
+    /**
+     * Show the form for editing the specified resource.
+     */
     Route::get('/{post}/edit', 'edit')->name('edit');
     Route::put('/{post}/update', 'update')->name('update');
+
+    /**
+     * Remove the specified resource from storage.
+     */
     Route::get('/{post}/delete', 'destroy')->name('delete');
 });
