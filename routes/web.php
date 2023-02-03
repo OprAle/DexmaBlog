@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
@@ -23,63 +24,37 @@ Route::get('/', function () {
 
 
 
-Route::get('/posts', function () {
-    return view('posts', [
-        'posts' => Post::latest()->with(['category', 'user'])->get()]);
-})->name('posts');
+Route::get(
+    '/posts',
+    [PostController::class, 'index']
+)->name('posts');
 
-Route::get('/posts/create', function () {
-    return view('posts.create', [
-        'categories' => Category::all(),
-        'users' => User::all(),
-    ]);
-})->name('posts.create');
+Route::get(
+    '/posts/create',
+    [PostController::class, 'create']
+)->name('posts.create');
 
+Route::post(
+    '/posts',
+    [PostController::class, 'store']
+)->name('posts.store');
 
-Route::post('/posts', function (Request $request) {
+Route::get(
+    '/posts/{post}',
+    [PostController::class, 'show']
+)->name('posts.show');
 
-    Post::create([
-        'user_id' => $request->input('user_id'),
-        'category_id' => $request->input('category_id'),
-        'title' => $request->input('title'),
-        'sub_title' => $request->input('sub_title'),
-        'body' => $request->input('body'),
-        'published_at' => $request->input('published_at'),
-    ]);
+Route::get(
+    '/posts/{post}/edit',
+    [PostController::class, 'edit']
+)->name('posts.edit');
 
-    return redirect()->route('posts');
-})->name('posts.store');
+Route::put(
+    '/posts/{post}/update',
+    [PostController::class, 'update']
+)->name('posts.update');
 
-Route::get('/posts/{post}', function (Post $post) {
-    return view('posts.show', [
-        'post' => $post->load(['category', 'user']),
-    ]);
-})->name('posts.show');
-
-Route::get('/posts/{post}/edit', function (Post $post) {
-    return view('posts.edit', [
-        'post' => $post,
-        'categories' => Category::all(),
-        'users' => User::all(),
-    ]);
-})->name('posts.edit');
-
-Route::put('/posts/{post}/update', function (Post $post, Request $request) {
-    $post->update([
-        'user_id' => $request->input('user_id'),
-        'category_id' => $request->input('category_id'),
-        'title' => $request->input('title'),
-        'sub_title' => $request->input('sub_title'),
-        'body' => $request->input('body'),
-        'published_at' => $request->input('published_at'),
-    ]);
-
-    return redirect()->route('posts');
-
-})->name('posts.update');
-
-Route::get('/posts/{post}/delete', function (Post $post) {
-    $post->delete();
-    return redirect()->route('posts');
-})->name('posts.delete');
-
+Route::get(
+    '/posts/{post}/delete',
+    [PostController::class, 'delete']
+)->name('posts.delete');
