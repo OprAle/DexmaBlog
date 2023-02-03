@@ -6,7 +6,7 @@
 <div>
     <div class="my-5">
         <button class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-3 rounded">
-            <a href="{{ route('posts') }}">
+            <a href="{{ route('posts.index') }}">
                 < Back to posts</a>
         </button>
     </div>

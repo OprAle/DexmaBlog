@@ -18,12 +18,12 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::controller(PostController::class)->group(function () {
-    Route::get('posts', 'index')->name('posts');
-    Route::get('posts/create', 'create')->name('posts.create');
-    Route::post('posts', 'store')->name('posts.store');
-    Route::get('posts/{post}', 'show')->name('posts.show');
-    Route::get('posts/{post}/edit', 'edit')->name('posts.edit');
-    Route::put('posts/{post}/update', 'update')->name('posts.update');
-    Route::get('posts/{post}/delete', 'destroy')->name('posts.delete');
+Route::controller(PostController::class)->name('posts.')->group(function () {
+    Route::get('posts', 'index')->name('index');
+    Route::get('posts/create', 'create')->name('create');
+    Route::post('posts', 'store')->name('store');
+    Route::get('posts/{post}', 'show')->name('show');
+    Route::get('posts/{post}/edit', 'edit')->name('edit');
+    Route::put('posts/{post}/update', 'update')->name('update');
+    Route::get('posts/{post}/delete', 'destroy')->name('delete');
 });
