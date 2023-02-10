@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\Category\CategoryResource;
 use App\Http\Resources\Post\PostIndexResource;
 use App\Http\Resources\Post\PostShowResource;
@@ -11,13 +13,15 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class PostController extends Controller {
+class PostController extends Controller
+{
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $posts = Post::latest()->with(['category', 'user'])->get();
 
         return view('posts')->with(
@@ -31,7 +35,8 @@ class PostController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
+    public function create()
+    {
         $categories = Category::all();
         $users = User::all();
 
@@ -46,17 +51,11 @@ class PostController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
-        Post::create([
-            'user_id' => $request->input('user_id'),
-            'category_id' => $request->input('category_id'),
-            'title' => $request->input('title'),
-            'sub_title' => $request->input('sub_title'),
-            'body' => $request->input('body'),
-            'published_at' => $request->input('published_at'),
-        ]);
+    public function store(StorePostRequest $request)
+    {
+        Post::create($request->validated());
 
-        return redirect()->route('posts');
+        return redirect()->route('posts.index');
     }
 
     /**
@@ -65,7 +64,8 @@ class PostController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post) {
+    public function show(Post $post)
+    {
         return view('posts.show')->with('post', new PostShowResource($post));
     }
 
@@ -75,7 +75,8 @@ class PostController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Post $post) {
+    public function edit(Post $post)
+    {
         $categories = Category::all();
         $users = User::all();
 
@@ -93,17 +94,11 @@ class PostController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Post $post, Request $request) {
-        $post->update([
-            'user_id' => $request->input('user_id'),
-            'category_id' => $request->input('category_id'),
-            'title' => $request->input('title'),
-            'sub_title' => $request->input('sub_title'),
-            'body' => $request->input('body'),
-            'published_at' => $request->input('published_at'),
-        ]);
+    public function update(Post $post, UpdatePostRequest $request)
+    {
+        $post->update($request->validated());
 
-        return redirect()->route('posts');
+        return redirect()->route('posts.index');
     }
 
     /**
@@ -112,8 +107,9 @@ class PostController extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post) {
+    public function destroy(Post $post)
+    {
         $post->delete();
-        return redirect()->route('posts');
+        return redirect()->route('posts.index');
     }
 }

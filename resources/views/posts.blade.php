@@ -9,16 +9,19 @@
         </button>
     </div>
     <div>
-    @foreach ($posts as $post)
+        @foreach ($posts as $post)
             <div class="my-5">
                 <div class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5">
                     <div class="flex justify-between">
-                            <a href="{{route('posts.show', $post->id)}}" class="font-bold text-2xl hover:underline cursor-pointer">
-                                {{ $post->title }}
-                            </a>
-                        <div class="text-sm">
-                            Published at: {{ $post->published_at->DiffForHumans() }}
-                        </div>
+                        <a href="{{ route('posts.show', $post->id) }}"
+                            class="font-bold text-2xl hover:underline cursor-pointer">
+                            {{ $post->title }}
+                        </a>
+                        @if ($post->published_at)
+                            <div class="text-sm">
+                                Published at: {{ $post->published_at->DiffForHumans() }}
+                            </div>
+                        @endif
                     </div>
                     <div class="font-bold text-lg text-slate-400 my-3 w-50">
                         {{ $post->sub_title }}
